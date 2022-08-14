@@ -6,4 +6,5 @@ export type Message = {
   message: string,
   timestamp: string,
   urgent: boolean,
+  selected: boolean,
 }
