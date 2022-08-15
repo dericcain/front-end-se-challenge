@@ -13,9 +13,6 @@
     </div>
     <Confirm :show="showConfirm" :on-confirm="deleteMessages" :on-cancel="closeConfirmModal">
       <template #header>
-        <span class="inbox-list__header-warning">
-          <FontAwesomeIcon class="fa-lg" icon="circle-exclamation" />
-        </span>
         Are you sure?
       </template>
       <template #body>
@@ -94,10 +91,6 @@
   height: 64px;
   justify-content: space-between;
   padding: 12px 24px;
-}
-
-.inbox-list__header-warning {
-  color: $color-error;
 }
 
 .inbox-list__actions {

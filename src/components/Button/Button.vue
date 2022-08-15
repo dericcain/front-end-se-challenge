@@ -40,7 +40,12 @@
 
   &__error {
     background-color: $button-color-error;
-    color: white;
+    color: #fff;
+  }
+
+  &__success {
+    background-color: $button-color-success;
+    color: #fff;
   }
 }
 </style>
