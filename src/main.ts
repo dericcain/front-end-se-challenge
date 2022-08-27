@@ -6,7 +6,9 @@ import {
   faEllipsisV,
   faCheckCircle,
   faExclamation,
-  faTrashCan, faCircleExclamation
+  faTrashCan,
+  faCircleExclamation,
+  faPaw
 } from '@fortawesome/free-solid-svg-icons'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
@@ -25,6 +27,7 @@ library.add(
   faExclamation,
   faTrashCan,
   faCircleExclamation,
+  faPaw,
 )
 
 const app = createApp(App)
