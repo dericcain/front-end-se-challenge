@@ -6,7 +6,7 @@
       :on-cancel="closeConfirmModal"
       okay-button-text="Save & Continue?"
       cancel-button-text="Cancel"
-      okay-button-color="success"
+      okay-button-color="primary"
     >
       <template #header>
         Are you sure?

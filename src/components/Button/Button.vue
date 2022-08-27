@@ -9,6 +9,9 @@
 
   interface Props extends Partial<HTMLButtonElement> {
     color: 'error' | 'primary',
+    // I definitely need to brush up on using TS correctly with Vue props...
+    // eslint-disable-next-line vue/no-unused-properties
+    type: 'button' | 'submit' | 'reset' | undefined,
   }
 
   const props = withDefaults(defineProps<Props>(), {
