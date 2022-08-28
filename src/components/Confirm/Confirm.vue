@@ -40,7 +40,7 @@
     // eslint-disable-next-line vue/no-unused-properties
     cancelButtonText?: string,
     // eslint-disable-next-line vue/no-unused-properties
-    okayButtonColor?: 'error' | 'primary',
+    okayButtonColor?: 'error' | 'primary' | 'success',
   }
 
   const props = defineProps<Props>()

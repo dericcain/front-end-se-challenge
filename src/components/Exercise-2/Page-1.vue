@@ -6,7 +6,7 @@
       :on-cancel="closeConfirmModal"
       okay-button-text="Save & Continue?"
       cancel-button-text="Cancel"
-      okay-button-color="primary"
+      okay-button-color="success"
     >
       <template #header>
         Are you sure?
@@ -55,8 +55,8 @@
     showConfirm.value = false
   }
 
-  onBeforeRouteLeave(() => {
-    if (!inputMatches.value) {
+  onBeforeRouteLeave((to) => {
+    if (!inputMatches.value && to.path.includes('page-2')) {
       showConfirm.value = true
       return false
     }
