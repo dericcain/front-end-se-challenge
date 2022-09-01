@@ -5,7 +5,7 @@
         {{ messagingStore.selectedMessageLabel }}
       </div>
       <div class="inbox-list__actions">
-        <FontAwesomeIcon class="fa-lg" :icon="['fas', 'search']" />
+        <input v-model="search" type="text" placeholder="Search messages...">
         <button type="button" :disabled="messagingStore.selectedMessages.length < 1" class="inbox-list__actions-delete" @click="openConfirmModal">
           <FontAwesomeIcon class="fa-lg" :icon="['fas', 'trash-can']" />
         </button>
@@ -19,9 +19,9 @@
         This action cannot be undone...
       </template>
     </Confirm>
-    <div v-if="messagingStore.hasMessages" class="inbox-list__messages">
+    <div v-if="hasMessages" class="inbox-list__messages">
       <MessageItem
-        v-for="message in messages"
+        v-for="message in filteredMessages"
         :key="message.id"
         :message="message"
         :selected="message.selected"
@@ -38,20 +38,32 @@
 
 <script lang="ts" setup>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  import { ref, PropType } from 'vue'
+  import { ref, PropType, computed } from 'vue'
   import Confirm from '@/components/Confirm/Confirm.vue'
   import MessageItem from '@/components/Exercise-1/MessageItem.vue'
   import { useMessagingStore } from '@/stores/messaging'
   import { Message } from '@/types/Exercise-1/Message'
 
   const messagingStore = useMessagingStore()
+  const search = ref('')
 
-  defineProps({
+  const props = defineProps({
     messages: {
       type: Array as PropType<Message[]>,
       default: () => [],
     },
   })
+
+  function filterMessages(messages: Message[]): Message[] {
+    return messages.filter(({ message, from, subject }) => {
+      return [message, from, subject].some(field => field.toLowerCase().includes(search.value))
+    })
+  }
+
+  const filteredMessages = computed<Message[]>(() => search.value ? filterMessages(props.messages) : props.messages,
+  )
+
+  const hasMessages = computed<boolean>(() => filteredMessages.value.length > 0)
 
   const showConfirm = ref<boolean>(false)
 
@@ -97,6 +109,14 @@
   display: flex;
   gap: 24px;
   position: relative;
+
+  input {
+    all: unset;
+    background-color: #fff;
+    padding: 6px 9px;
+    border-radius: 3px;
+    color: #1d252b;
+  }
 
   &-delete {
     background: none;

@@ -31,9 +31,6 @@ export const useMessagingStore = defineStore('messaging', {
     },
   },
   getters: {
-    hasMessages(): boolean {
-      return this.messages.length > 0
-    },
     selectedMessageLabel(): string {
       return this.selectedMessages.length
         ? `${this.selectedMessages.length} ${toPlural('message', this.selectedMessages.length)} selected`
