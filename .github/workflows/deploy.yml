@@ -1,0 +1,12 @@
+name: Prod Release 
+
+on:
+  push:
+    tags:        
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - run: curl -X POST -d {} https://api.vercel.com/v1/integrations/deploy/prj_2S5PfizAKlL2UyTe3f6OxHRDLSsq/aZyPpOQ1Tz
