@@ -45,7 +45,7 @@
 
     <!-- You may modify any code beneath this line -->
     <div class="exercise-1__results">
-      <InboxList :messages="messagingStore.filteredMessages" />
+      <InboxList :messages="messagingStore.messages" />
     </div>
   </div>
 </template>
