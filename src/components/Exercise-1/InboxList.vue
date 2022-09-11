@@ -2,22 +2,35 @@
   <div class="inbox-list">
     <div class="inbox-list__top-bar">
       <div class="inbox-list__title">
-        {{ selectedMessagesLabel }}
+        {{ messagingStore.selectedMessageLabel }}
       </div>
       <div class="inbox-list__actions">
-        <FontAwesomeIcon class="fa-lg" :icon="['fas', 'search']" />
-        <FontAwesomeIcon class="fa-lg" :icon="['fas', 'ellipsis-v']" />
+        <input v-model="search" type="text" placeholder="Search messages...">
+        <button type="button" :disabled="messagingStore.selectedMessages.length < 1" class="inbox-list__actions-delete" @click="openConfirmModal">
+          <FontAwesomeIcon class="fa-lg" :icon="['fas', 'trash-can']" />
+        </button>
       </div>
     </div>
-
-    <div class="inbox-list__messages">
+    <Confirm :show="showConfirm" :on-confirm="deleteMessages" :on-cancel="closeConfirmModal">
+      <template #header>
+        Are you sure?
+      </template>
+      <template #body>
+        This action cannot be undone...
+      </template>
+    </Confirm>
+    <div v-if="hasMessages" class="inbox-list__messages">
       <MessageItem
-        v-for="message in messages"
+        v-for="message in filteredMessages"
         :key="message.id"
         :message="message"
-        :selected="selectedMessages.includes(message)"
-        @update:selected="toggleSelection(message, $event)"
+        :selected="message.selected"
+        :urgent="message.urgent"
+        @update:selected="messagingStore.toggleSelectMessage(message)"
       />
+    </div>
+    <div v-else class="inbox-list__no-messages">
+      <p>You have no messages at this time...</p>
     </div>
   </div>
 </template>
@@ -25,45 +38,47 @@
 
 <script lang="ts" setup>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  import { computed, PropType, reactive } from 'vue'
+  import { ref, PropType, computed } from 'vue'
+  import Confirm from '@/components/Confirm/Confirm.vue'
   import MessageItem from '@/components/Exercise-1/MessageItem.vue'
+  import { useMessagingStore } from '@/stores/messaging'
   import { Message } from '@/types/Exercise-1/Message'
 
-  defineProps({
+  const messagingStore = useMessagingStore()
+  const search = ref('')
+
+  const props = defineProps({
     messages: {
       type: Array as PropType<Message[]>,
       default: () => [],
     },
   })
 
-  const selectedMessages: Message[] = reactive([])
-
-  const selectedMessagesLabel = computed(() => selectedMessages.length
-    ? `${selectedMessages.length} ${toPlural('message', selectedMessages.length)} selected`
-    : 'Inbox')
-
-  function toPlural(word: string, count: number): string {
-    return count === 1 ? word : `${word}s`
+  function filterMessages(messages: Message[]): Message[] {
+    return messages.filter(({ message, from, subject }) => {
+      return [message, from, subject].some(field => field.toLowerCase().includes(search.value))
+    })
   }
 
-  function toggleSelection(message: Message, selected: boolean): void {
-    unselectMessage(message)
+  const filteredMessages = computed<Message[]>(() => search.value ? filterMessages(props.messages) : props.messages,
+  )
 
-    if (selected) {
-      selectMessage(message)
-    }
+  const hasMessages = computed<boolean>(() => filteredMessages.value.length > 0)
+
+  const showConfirm = ref<boolean>(false)
+
+  function closeConfirmModal(): void {
+    showConfirm.value = false
   }
 
-  function selectMessage(message: Message): void {
-    selectedMessages.push(message)
+  function openConfirmModal(): void {
+    showConfirm.value = true
   }
 
-  function unselectMessage(message: Message): void {
-    const index = selectedMessages.indexOf(message)
-
-    if (index > -1) {
-      selectedMessages.splice(index, 1)
-    }
+  function deleteMessages(): void {
+    // Call the message store to delete the messages once confirmed
+    messagingStore.deleteMessages(messagingStore.selectedMessages)
+    closeConfirmModal()
   }
 </script>
 
@@ -71,8 +86,12 @@
 .inbox-list {
   background-color: white;
   border-radius: 4px;
-  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
-    0 1px 8px 0 rgba(0, 0, 0, 0.12) !important;
+  box-shadow: $box-shadow-1;
+  position: relative;
+
+  &__no-messages {
+   padding: 18px;
+  }
 }
 
 .inbox-list__top-bar {
@@ -80,8 +99,7 @@
   align-items: center;
   color: white;
   background-color: #76d7c4;
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
-    0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: $box-shadow-2;
   height: 64px;
   justify-content: space-between;
   padding: 12px 24px;
@@ -90,6 +108,26 @@
 .inbox-list__actions {
   display: flex;
   gap: 24px;
+  position: relative;
+
+  input {
+    all: unset;
+    background-color: #fff;
+    padding: 6px 9px;
+    border-radius: 3px;
+    color: #1d252b;
+  }
+
+  &-delete {
+    background: none;
+    border: none;
+    outline: none;
+    color: white;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .inbox-list__title {

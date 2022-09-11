@@ -55,18 +55,19 @@
 
     <!-- You may modify any code beneath this line -->
     <div class="exercise-3__results">
-      <SOExample />
+      <Dogs />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import SOExample from '@/components/Exercise-3/SOExample.vue'
+  import Dogs from '@/components/Exercise-3/Dogs.vue'
   import InfoBox from '@/components/InfoBox.vue'
 </script>
 
 <style lang="scss">
 .exercise-3__results {
+  box-sizing: border-box;
   background-color: white;
   border-radius: 4px;
   box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),

@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia'
 
 type SavedInputState = {
-  input: string | null,
+  input: string,
 }
 
 export const useSavedInput = defineStore('savedInput', {
   state: (): SavedInputState => ({
-    input: null,
+    input: '',
   }),
   actions: {
-    save(value: string | null) {
+    save(value: string) {
       this.input = value
     },
   },

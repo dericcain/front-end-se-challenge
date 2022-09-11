@@ -57,7 +57,6 @@
           </router-link>
         </div>
       </div>
-
       <router-view />
     </div>
   </div>
@@ -91,6 +90,7 @@
 }
 
 .exercise-2__results {
+  position: relative;
   padding: 24px 0;
   background-color: white;
   border-radius: 4px;
