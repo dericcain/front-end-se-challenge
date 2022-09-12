@@ -17,4 +17,4 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           PRODUCTION: false # Don't deploy to production environment
-          ALIAS_DOMAINS: pr-{PR}-front-end-se-challenge.vercel.app
+          PR_PREVIEW_DOMAIN: "pr-{PR}-front-end-se-challenge.vercel.app"
