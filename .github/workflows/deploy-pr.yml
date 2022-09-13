@@ -4,7 +4,6 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   deploy:
-    environment: Staging
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
